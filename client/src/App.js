@@ -28,6 +28,25 @@ function App() {
         .catch((error) => console.log(error));
     }
   };
+  const handleUpdate = (id) => {
+    axios
+      .get(`${url}/${id}`)
+      .then((response) => {
+        const { todo } = response.data;
+        input.current.value = todo;
+      })
+      .catch((error) => console.log(error));
+    // axios.patch(`${url}/${id}`, {});
+  };
+  const handleDelete = (id) => {
+    axios
+      .delete(`${url}/${id}`)
+      .then((response) => {
+        const { _id: id } = response.data;
+        setTodos(todos.filter((todo) => todo._id !== id));
+      })
+      .catch((error) => console.log(error));
+  };
   if (loading) {
     return <h1>Loading...</h1>;
   }
@@ -42,7 +61,11 @@ function App() {
       </div>
       <div className="list">
         {todos.map((todo) => (
-          <p key={todo._id}>{todo.todo}</p>
+          <div key={todo._id} className="todo">
+            <p>{todo.todo}</p>
+            <button onClick={() => handleUpdate(todo._id)}>update</button>
+            <button onClick={() => handleDelete(todo._id)}>delete</button>
+          </div>
         ))}
       </div>
     </div>
