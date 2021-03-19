@@ -7,6 +7,7 @@ import {
   Container,
   List,
   Button,
+  // TextField,
 } from "@material-ui/core";
 import Form from "./Form";
 import Item from "./Item";
@@ -48,14 +49,6 @@ function App() {
       console.log(error);
     }
   };
-  const createTodo = async () => {
-    try {
-      await axios.post(url, { todo: "fighting" });
-      fetchData();
-    } catch (error) {
-      console.log(error);
-    }
-  };
   if (loading) {
     return <h1>Loading...</h1>;
   }
@@ -71,26 +64,12 @@ function App() {
         <Typography align="center" variant="h4" className={classes.header}>
           Todo App
         </Typography>
-
-        <Form
-          todos={todos}
-          setTodos={setTodos}
-          setLoading={setLoading}
-          fetchData={fetchData}
-        />
+        <Form fetchData={fetchData} />
         <List>
           {todos.map((todo) => (
             <Item key={todo._id} {...todo} handleDelete={handleDelete} />
           ))}
         </List>
-        <Button
-          className={classes.clearBtn}
-          variant="contained"
-          color="primary"
-          onClick={createTodo}
-        >
-          Create
-        </Button>
         <Button
           className={classes.clearBtn}
           variant="contained"

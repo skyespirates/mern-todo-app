@@ -3,19 +3,14 @@ import { TextField } from "@material-ui/core";
 import { useStyles } from "./styles";
 import axios from "axios";
 const url = "http://localhost:5000/todos";
-export default function Form({ todos, setTodos, setLoading }) {
+export default function Form({ fetchData }) {
   const classes = useStyles();
   const textField = useRef(null);
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.post(url, { todo: textField.current.value });
-    if (textField.current.value) {
-      axios
-        .get(url)
-        .then(({ data }) => setTodos(data))
-        .catch((error) => console.log(error));
-    }
+    await axios.post(url, { todo: textField.current.value });
     textField.current.value = "";
+    fetchData();
   };
   return (
     <form noValidate autoComplete="off" onSubmit={handleSubmit}>
