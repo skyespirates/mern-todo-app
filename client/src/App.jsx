@@ -5,10 +5,10 @@ import {
   Toolbar,
   Typography,
   Container,
-  TextField,
   List,
   Button,
 } from "@material-ui/core";
+import Form from "./Form";
 import Item from "./Item";
 import { useStyles } from "./styles";
 import axios from "axios";
@@ -17,7 +17,6 @@ const url = "http://localhost:5000/todos";
 function App() {
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState([]);
-  const [text, setText] = useState("");
   const classes = useStyles();
   const fetchData = async () => {
     try {
@@ -49,6 +48,14 @@ function App() {
       console.log(error);
     }
   };
+  const createTodo = async () => {
+    try {
+      await axios.post(url, { todo: "fighting" });
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   if (loading) {
     return <h1>Loading...</h1>;
   }
@@ -64,19 +71,26 @@ function App() {
         <Typography align="center" variant="h4" className={classes.header}>
           Todo App
         </Typography>
-        <form noValidate autoComplete="off">
-          <TextField
-            id="outlined-basic"
-            label="what you're gonna do?"
-            variant="outlined"
-            className={classes.textInput}
-          />
-        </form>
+
+        <Form
+          todos={todos}
+          setTodos={setTodos}
+          setLoading={setLoading}
+          fetchData={fetchData}
+        />
         <List>
           {todos.map((todo) => (
             <Item key={todo._id} {...todo} handleDelete={handleDelete} />
           ))}
         </List>
+        <Button
+          className={classes.clearBtn}
+          variant="contained"
+          color="primary"
+          onClick={createTodo}
+        >
+          Create
+        </Button>
         <Button
           className={classes.clearBtn}
           variant="contained"
